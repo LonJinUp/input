@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+    <!-- 是否启动webapp功能，会删除默认的苹果工具栏和菜单栏。 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 这个主要是根据实际的页面设计的主体色为搭配来进行设置。 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 忽略页面中的数字识别为电话号码,email识别 -->
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <!-- 启用360浏览器的极速模式(webkit) -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+    <meta name="HandheldFriendly" content="true">
+    <!-- 微软的老式浏览器 -->
+    <meta name="MobileOptimized" content="320">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!-- UC强制全屏 -->
+    <meta name="full-screen" content="yes">
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <!-- windows phone 点击无高光 -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="stylesheet" href="css/base.css">
+    <title>第一课堂-注册</title>
+</head>
+<style>
+    html,body{
+        width: 100%;
+        height: 100%;
+    }
+    .background{
+        width: 100%;
+        height: 100%;
+        background: url("share.png")no-repeat center center /100% 100%;
+        box-sizing: border-box;
+        padding: 0 .78rem;
+        padding-top: 5.19rem;
+
+    }
+    .phone{
+        width: 5.8rem;
+        height: .8rem;
+        border: none;
+        outline:none;
+        border-radius: .1rem;
+        box-sizing: border-box;
+        padding: 0 .2rem;
+        line-height: .8rem;
+        margin-bottom: .3rem;
+    }
+    .phone:hover{
+        border: none;
+    }
+    .code-box{
+        width: 5.8rem;
+        height: .8rem;
+        border: none;
+        outline:none;
+        border-radius: .1rem;
+        box-sizing: border-box;
+        padding: 0 .2rem;
+        line-height: .8rem;
+        margin-bottom: .3rem;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .code{
+        width: 50%;
+        height: 100%;
+        border: none;
+        outline:none;
+        box-sizing: border-box;
+        line-height: .8rem;
+    }
+    button{
+        background: #1cda9d;
+        border:none;
+        border-radius: .06rem;
+        width:30%;
+        height: 80%;
+        color: #fff;
+        outline:none;
+    }
+    button.active{
+        background: #ccc;
+    }
+    .next{
+        width: 5.8rem;
+        height: .8rem;
+        border-radius: .1rem;
+        box-sizing: border-box;
+        line-height: .8rem;
+        text-align: center;
+        background: #1cda9d;
+        color: #fff;
+    }
+    .code_btn{
+        border:none;
+        border-radius: .06rem;
+        width:30%;
+        height: 80%;
+        color: #fff;
+        outline:none;
+    }
+    .code_btn2{
+        border:none;
+        border-radius: .06rem;
+        width:30%;
+        height: 80%;
+        color: #fff;
+        outline:none;
+    }
+</style>
+<body>
+    <div class="background">
+        <input type="text" placeholder="请输入手机号" class="phone mobile">
+        <div class="code-box">
+            <input type="text" placeholder="图形验证码" class="code_val code" >
+            <img src="" alt="" class="code_btn2" onclick="getimgcode()">
+        </div>
+        <div class="code-box">
+            <input type="text" placeholder="验证码" class="code id">
+            <button type="button" class="code_btn">发送验证码</button>
+        </div>
+
+        <input type="password" placeholder="请输入密码" class="phone password">
+        <div class="next">免费领取家庭教育精品课程</div>
+    </div>
+</body>
+<script  src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>
+<script src="css/rem.js"></script>
+<script src="css/md5.js"></script>
+<script>
+    var vipcode = GetURL("vipcode");
+
+    //发送验证码接口
+    $(".code_btn").click(function () {
+        GetCode()
+    })
+    function GetCode() {
+        var reg = /^1[0-9]{10}$/;
+        mobile = $(".mobile").val();
+        var idkey = reg.test(mobile);
+        if(idkey){
+            yzm();
+            var obj = getsign();
+            obj.mobile = mobile;
+            obj.token = $(".code_val").val();
+            obj.type = 3;
+            $.post("http://www.dykt.extouz.com/api/user/mzfly",obj,function(e){
+                var key = JSON.parse(e);
+                if(key.resCode=="1111"){
+
+                }else{
+                    alert(key.resMsg)
+                }
+            })
+        }else{
+            alert("请输入手机号")
+        }
+    }
+
+    function getsign(){
+        var time = new Date().getTime();
+        var obj = {};
+        var sign = "83847437837439234394834"+time;
+        obj.sign=sign;
+        obj.time = time;
+        return obj;
+    }
+    //图形验证码
+    function getimgcode(){
+        var obj = getsign();
+        $(".code_btn2").attr("src","http://dykt.extouz.com/api/user/makeCodeToken?sign="+obj.sign+"&time="+obj.time);
+    }
+    getimgcode();
+
+    //验证码倒计时
+    function yzm() {
+        var that = $(".code_btn");
+        var timeo = 60;
+        var timeStop = setInterval(function(){
+            timeo--;
+            if (timeo>0) {
+                that.text('重新发送' + timeo +'s');
+                that.attr('disabled','disabled');//禁止点击
+                that.addClass("active");
+            }else{
+                timeo = 60;//当减到0时赋值为60
+                that.text('获取验证码');
+                clearInterval(timeStop);//清除定时器
+                that.removeClass("active");
+                that.removeAttr('disabled');//移除属性，可点击
+            }
+        },1000)
+    }
+
+    //验证不为空
+    function testreg(){
+        password = $(".password").val();
+        codeid = $(".id").val();
+        mobile = $(".mobile").val();
+        if(rule(mobile)){
+            if(rule(codeid)){
+                if(rule(password)){
+                    return true;
+                }else{
+                    alert("密码不能为空")
+                }
+            }else{
+                alert("验证码不能为空")
+            }
+        }else{
+            alert("手机号不能为空")
+        }
+    }
+    //点击注册
+    $(".next").on("click",function(){
+        if(testreg()){
+            var obj = getsign();
+            obj.mobile = $(".mobile").val();
+            obj.code = $(".id").val();
+            obj.type = 3;
+            $.post("http://dykt.extouz.com/api/user/checkCode",obj,function(e){
+                var key = JSON.parse(e);
+                if(key.resCode=="1111"){
+                    var timestamp = Date.parse(new Date());
+                    var obj = getsign();
+                    obj.mobile=mobile;//电话号码
+                    obj.password=hex_md5(password);//密码
+                    obj.equipment_code=timestamp;
+                    $.post("http://dykt.extouz.com/api/user/register",obj,function(e){
+                        var data = JSON.parse(e);
+                        if(data.resCode==1111){
+                            window.location.href="http://dykt.extouz.com/web/speecher/newdown.html"
+                        }else{
+                            alert("注册失败");
+                        }
+                        user_id = data.data.user_id;
+                    })
+                }else{
+                    alert("验证码验证失败！")
+                }
+            });
+        }
+    })
+
+
+</script>
+</html>
