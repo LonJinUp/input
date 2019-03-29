@@ -60,19 +60,7 @@
 <script src="css/rem.js"></script>
 <script>
     $(".background").click(function () {
-        //判定ios和安卓
-        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-            window.location.href="https://itunes.apple.com/cn/app/%E7%AC%AC%E4%B8%80%E8%AF%BE%E5%A0%82/id1321291986?mt=8"
-        } else if (/(Android)/i.test(navigator.userAgent)) {
-            var ua = navigator.userAgent.toLowerCase();
-            if(ua.match(/MicroMessenger/i)=="micromessenger") {
-                alert("请在浏览器中打开链接")
-            } else {
-                window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=com.xgkj.diyiketang"
-            }
-        } else {
-            alert("不支持PC端下载")
-        }
+       window.location.href="gjculture.cn://123456"
     })
 </script>
 </html>
